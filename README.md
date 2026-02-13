@@ -4,6 +4,8 @@ Automates downloading files from a Printables model page using Selenium + Firefo
 
 ## Disclosure / Use
 
+The reason this script exixsts is for the limitations of big collectins of items, that make them impossible to download all in one click (as of now). This is not intended to be an exploit and will likely encour in rate limits pretty fast.
+
 - This script automates browser actions on Printables. Use it responsibly and comply with Printables terms, rate limits, and model licenses.
 - You are responsible for ensuring you have permission to download and use each file.
 - The script simulates clicks; it does not bypass paywalls or access restrictions.
