@@ -6,7 +6,7 @@ Automates downloading files from a Printables model page using Selenium + Firefo
 
 The reason this script exists is for the limitations of big collections of items that make them impossible to download all in one click (as of now). This is not intended to be an exploit and will likely encounter rate limits pretty fast.
 
-**Note on Rate Limits**: Printables has a batch download button for models with approximately 900+ files, but for models with 2000+ files, this button is not available. This script is necessary for downloading very large model collections that exceed the batch download threshold.
+**Note on Rate Limits**: Printables typically provides a batch download button for models with many files. However, for extremely large model collections (approximately 2000+ files), this batch download button may not be available, and individual file downloads become necessary. This script is designed to handle such large collections that exceed the batch download threshold.
 
 - This script automates browser actions on Printables. Use it responsibly and comply with Printables terms, rate limits, and model licenses.
 - You are responsible for ensuring you have permission to download and use each file.

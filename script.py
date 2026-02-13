@@ -15,6 +15,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 LOGGER = logging.getLogger("printables_downloader")
 KNOWN_EXTENSIONS = ("stl", "3mf", "obj", "zip")
+FOLDER_EXPAND_MAX_RETRIES = 5
 
 
 def _slug_from_url(url):
@@ -91,8 +92,7 @@ def _expand_folders(driver, min_folder_delay=0.3, max_folder_delay=1.5):
             driver.execute_script("arguments[0].click();", button)
             
             # Wait for folder to expand and verify icon change
-            max_retries = 5
-            for retry in range(max_retries):
+            for retry in range(FOLDER_EXPAND_MAX_RETRIES):
                 time.sleep(0.2)
                 # Re-fetch the element to get updated classes
                 try:
