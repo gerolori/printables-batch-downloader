@@ -15,6 +15,7 @@ from webdriver_manager.firefox import GeckoDriverManager
 
 LOGGER = logging.getLogger("printables_downloader")
 KNOWN_EXTENSIONS = ("stl", "3mf", "obj", "zip")
+FOLDER_EXPAND_MAX_RETRIES = 5
 
 
 def _slug_from_url(url):
@@ -60,18 +61,61 @@ def _try_accept_cookies(driver, wait):
     LOGGER.info("Cookie banner not found or already accepted.")
 
 
-def _expand_folders(driver):
+def _expand_folders(driver, min_folder_delay=0.3, max_folder_delay=1.5):
+    """
+    Expand all folders in the file tree with randomized delays and verification.
+    
+    Args:
+        driver: Selenium WebDriver instance
+        min_folder_delay: Minimum delay between folder expansions (default: 0.3)
+        max_folder_delay: Maximum delay between folder expansions (default: 1.5)
+    """
+    # Find all folder icons (both open and closed)
     folder_buttons = driver.find_elements(
         By.XPATH, "//i[contains(@class, 'fa-folder-open') or contains(@class, 'fa-folder')]"
     )
+    
+    expanded_count = 0
     for button in folder_buttons:
         try:
+            # Check if folder is already open by checking for 'fa-folder-open' class
+            classes = button.get_attribute("class") or ""
+            is_already_open = "fa-folder-open" in classes
+            
+            if is_already_open:
+                LOGGER.debug("Folder already expanded, skipping.")
+                continue
+            
+            # Scroll into view and click
             driver.execute_script("arguments[0].scrollIntoView();", button)
-            time.sleep(0.5)
+            time.sleep(0.3)
             driver.execute_script("arguments[0].click();", button)
-            time.sleep(random.uniform(0.2, 0.6))
+            
+            # Wait for folder to expand and verify icon change
+            for retry in range(FOLDER_EXPAND_MAX_RETRIES):
+                time.sleep(0.2)
+                # Re-fetch the element to get updated classes
+                try:
+                    current_classes = button.get_attribute("class") or ""
+                    if "fa-folder-open" in current_classes:
+                        LOGGER.debug("Folder expanded successfully (verified by icon change).")
+                        expanded_count += 1
+                        break
+                except Exception:
+                    # Element might be stale, break and continue to next folder
+                    break
+            else:
+                LOGGER.warning("Folder may not have expanded correctly (icon didn't change).")
+            
+            # Random delay before next folder to avoid bot detection
+            delay = random.uniform(min_folder_delay, max_folder_delay)
+            LOGGER.debug("Waiting %.2f seconds before next folder...", delay)
+            time.sleep(delay)
+            
         except Exception as exc:
             LOGGER.warning("Error opening folder: %s", exc)
+    
+    LOGGER.info("Expanded %s folder(s).", expanded_count)
 
 
 def _extract_name_from_button(button):

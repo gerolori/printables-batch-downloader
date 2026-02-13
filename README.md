@@ -4,7 +4,9 @@ Automates downloading files from a Printables model page using Selenium + Firefo
 
 ## Disclosure / Use
 
-The reason this script exixsts is for the limitations of big collectins of items, that make them impossible to download all in one click (as of now). This is not intended to be an exploit and will likely encour in rate limits pretty fast.
+The reason this script exists is for the limitations of big collections of items that make them impossible to download all in one click (as of now). This is not intended to be an exploit and will likely encounter rate limits pretty fast.
+
+**Note on Rate Limits**: Printables typically provides a batch download button for models with many files. However, for extremely large model collections (approximately 2000+ files), this batch download button may not be available, and individual file downloads become necessary. This script is designed to handle such large collections that exceed the batch download threshold.
 
 - This script automates browser actions on Printables. Use it responsibly and comply with Printables terms, rate limits, and model licenses.
 - You are responsible for ensuring you have permission to download and use each file.
@@ -62,3 +64,15 @@ Downloads go into a folder named after the model slug inside the base download d
 - If downloads are blocked by a new content type, add it to the MIME list in the script.
 - The missing-file check is best-effort and relies on page filename text.
 - Retries may still fail if the page layout changes or filenames cannot be detected.
+
+## Future Enhancements
+
+### Batch Collection Downloader
+A planned feature for data hoarding enthusiasts: the ability to download entire collections at once. This would be useful for maintaining essential models as backups in case of internet outages or remote site unavailability. You could periodically download all files from your "backup" collections to keep them updated with any new or modified files.
+
+### Automatic Zip Extraction
+When the "download all" button is available on Printables (typically for smaller model collections), the script could utilize this feature by:
+- Clicking the "download all" button to download a single zip file
+- Automatically extracting the zip to the correct folder structure
+- Overriding files with the same names and adding new files when decompressing
+- This would provide a faster alternative to individual file downloads when available
