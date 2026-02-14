@@ -70,7 +70,12 @@ Downloads go into a folder named after the model slug inside the base download d
 ### Batch Collection Downloader
 A planned feature for data hoarding enthusiasts: the ability to download entire collections at once. This would be useful for maintaining essential models as backups in case of internet outages or remote site unavailability. You could periodically download all files from your "backup" collections to keep them updated with any new or modified files.
 
-### Automatic Zip Extraction
+### Content aware batch saving
+
+#### Metadata analysis to prevent download of already downloaded data
+Two stage analysis. First get the latest changed file (may need to be setting those files to read only to avoid overiding 3mf files, need to check if files are still usable with any slicer) and compare it to the last update of the model page. If there's no newer update skip the download, else go check every download and find the ones that have never actually been downloaded or have a newer version compared to the local one
+
+#### Automatic Zip Extraction
 When the "download all" button is available on Printables (typically for smaller model collections), the script could utilize this feature by:
 - Clicking the "download all" button to download a single zip file
 - Automatically extracting the zip to the correct folder structure
